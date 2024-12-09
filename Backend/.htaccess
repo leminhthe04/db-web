@@ -1,0 +1,5 @@
+# Turn on Rewrite Engine mode
+RewriteEngine On
+
+# If a weir URL, jumps to index.php to determine the API 
+RewriteRule ^(.*)$ index.php [L,QSA]
