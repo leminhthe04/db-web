@@ -12,7 +12,7 @@ class Product {
     }
 
 
-    public function getBraking(@offset, @limit) {
+    public function getBraking($offset, $limit) {
         $stmt = $this->conn->prepare("EXEC findProductBreaking @offset = :offset, @limit = :limit");
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -23,12 +23,16 @@ class Product {
     }
 
     public function getById($id) {
-        $stmt = $this->conn->prepare("EXEC findById 'products', :id");
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $arr = fetch($stmt);
-        $stmt->closeCursor();
-        return $arr;
+        try {
+            $stmt = $this->conn->prepare("EXEC findById 'products', :id");
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $arr = fetch($stmt);
+            $stmt->closeCursor();
+            return $arr;
+        } catch (PDOException $e) {
+            return getResponseArray(400, $e->getMessage(), null);
+        }
     }
 
     public function getAllBranchByCategoryId($category_id, $offset, $limit) {
@@ -51,13 +55,23 @@ class Product {
                     $price, $description, $quantity, $category_id, $status) {
 
         try {
-            $stmt = $this->conn->prepare("EXEC insertProduct ?, ?, ?, ?, ?, ?, ?, ?, ?");
-            $stmt->execute([$seller_id, $store_id, $name, $brand,
-                            $price, $description, $quantity, $category_id, $status]);
+            $id = 0;
+            $stmt = $this->conn->prepare("EXEC insertProduct :seller_id, :store_id, :name, :brand, 
+                            :price, :description, :quantity, :category_id, :status, :id");
 
-            $product_id = $stmt->fetch(PDO::FETCH_ASSOC)['id'];
+            $stmt->bindValue(':seller_id', $seller_id, PDO::PARAM_INT);
+            $stmt->bindValue(':store_id', $store_id, PDO::PARAM_INT);
+            $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+            $stmt->bindValue(':brand', $brand, PDO::PARAM_STR);
+            $stmt->bindValue(':price', $price, PDO::PARAM_INT);
+            $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+            $stmt->bindValue(':quantity', $quantity, PDO::PARAM_INT);
+            $stmt->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+            $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT, 4);
+            $stmt->execute();
             $stmt->closeCursor();
-            return getResponseArray(201, "Product created", ["id" => $product_id]);
+            return getResponseArray(201, "Product created", ["id" => $id]);
         } catch (PDOexception $e) {
             return getResponseArray(400, $e->getMessage(), null);
         }
@@ -83,6 +97,7 @@ class Product {
         } catch (PDOexception $e) {
             return getResponseArray(400, $e->getMessage(), null);
         }
+    }
 
     public function updateDescription($id, $description) {
         try {

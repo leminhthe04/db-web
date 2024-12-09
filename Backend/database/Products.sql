@@ -74,7 +74,8 @@ CREATE OR ALTER PROCEDURE insertProduct
     @description TEXT,
     @quantity INT,
     @category_id INT,
-    @status NVARCHAR(20)
+    @status NVARCHAR(20),
+    @id  INT OUTPUT
 AS
 BEGIN
     
@@ -95,9 +96,16 @@ BEGIN
     INSERT INTO Products (seller_id, store_id, name, brand, price, description, quantity, category_id, status)
     VALUES (@seller_id, @store_id, @name, @brand, @price, @description, @quantity, @category_id, @status);
 
-    SELECT SCOPE_IDENTITY();
+    SET @id = SCOPE_IDENTITY();
 END;
 GO
+
+
+DECLARE @id INT = 0;
+EXEC insertProduct 2, 3, 'Product 2331', 'Brand 1', 1000, 'Description 1', 10, 1, 'Available', @id OUTPUT;
+SELECT @id;
+GO
+
 
 -- Thủ tục updateProductName
 CREATE OR ALTER PROCEDURE updateProductName

@@ -2,7 +2,6 @@
 
 require_once __DIR__ . '/../model/Product.php';
 require_once __DIR__ . '/../model/Category.php';
-require_once __DIR__ . '/../controller/ProductImageController.php';
 
 class ProductController {
 
@@ -39,6 +38,8 @@ class ProductController {
     }
 
     public function get($offset, $limit) {
+        $offset = $offset ?? 0;
+        $limit = $limit ?? 9999999;
         $product = new Product();
         $res = $product->getBraking($offset, $limit); // a fetch array or null
         if ($res){

@@ -31,44 +31,44 @@ if ($method == 'OPTIONS') {
 //     exit;
 // } 
 
-if (preg_match('/\/api\/user\/all$/', $uri)){
-    require __DIR__.'/api/user/getAll.php';
-    exit;
-}
+// if (preg_match('/\/api\/user\/all$/', $uri)){
+//     require __DIR__.'/api/user/getAll.php';
+//     exit;
+// }
 
-if (preg_match('/\/api\/user\/detail\/(\d+)$/', $uri, $matches)){
-    $_GET['id'] = $matches[1];
-    require __DIR__.'/api/user/detail.php';
-    exit;
-}
+// if (preg_match('/\/api\/user\/detail\/(\d+)$/', $uri, $matches)){
+//     $_GET['id'] = $matches[1];
+//     require __DIR__.'/api/user/detail.php';
+//     exit;
+// }
 
-if (preg_match('/\/api\/user\/create$/', $uri)){
-    require __DIR__.'/api/user/signup.php';
-    exit;
-}
+// if (preg_match('/\/api\/user\/create$/', $uri)){
+//     require __DIR__.'/api/user/signup.php';
+//     exit;
+// }
 
-if (preg_match('/\/api\/user\/update\/(\d+)$/', $uri, $matches)){
-    $_GET['id'] = $matches[1];
-    require __DIR__.'/api/user/update.php';
-    exit;
-}
+// if (preg_match('/\/api\/user\/update\/(\d+)$/', $uri, $matches)){
+//     $_GET['id'] = $matches[1];
+//     require __DIR__.'/api/user/update.php';
+//     exit;
+// }
 
-if (preg_match('/\/api\/user\/delete\/(\d+)$/', $uri, $matches)){
-    $_GET['id'] = $matches[1];
-    require __DIR__.'/api/user/delete.php';
-    exit;
-}
+// if (preg_match('/\/api\/user\/delete\/(\d+)$/', $uri, $matches)){
+//     $_GET['id'] = $matches[1];
+//     require __DIR__.'/api/user/delete.php';
+//     exit;
+// }
 
 
-if (preg_match('/\/api\/user\/delete\/all$/', $uri)){
-    require __DIR__.'/api/user/deleteAll.php';
-    exit;
-}
+// if (preg_match('/\/api\/user\/delete\/all$/', $uri)){
+//     require __DIR__.'/api/user/deleteAll.php';
+//     exit;
+// }
 
 
 ////////////////////// CATEGORY APIs //////////////////////
 
-if (preg_match('/\/api\/category\/get$/', $uri)){
+if (preg_match('/\/api\/category\/all$/', $uri)){
     require __DIR__.'/api/category/getAll.php';
     exit;
 }
@@ -153,6 +153,27 @@ if (preg_match('/\/api\/product\/delete\/(\d+)$/', $uri, $matches)){
     require __DIR__.'/api/product/delete.php';
     exit;
 }
+
+
+////////////////////////// SELLER APIs /////////////////////////////
+
+if (preg_match('/\/api\/seller\/get$/', $uri)){
+    require __DIR__.'/api/seller/get.php';
+    exit;
+}
+
+if (preg_match('/\/api\/seller\/detail\/(\d+)$/', $uri, $matches)){
+    $_GET['id'] = $matches[1];
+    require __DIR__.'/api/seller/detail.php';
+    exit;
+}
+
+if (preg_match('/\/api\/seller\/statistic\/(\d+)$/', $uri, $matches)){
+    $_GET['id'] = $matches[1];
+    require __DIR__.'/api/seller/statistic.php';
+    exit;
+}
+
 
 
 //////////////////////////// STORE APIs /////////////////////////////
