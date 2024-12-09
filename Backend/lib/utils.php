@@ -39,6 +39,7 @@ function fetch($sqlQuery) {
         return $res;
     }
     
+    // $res = $sqlQuery->fetchAll(PDO::FETCH_ASSOC);
     while ($row = $sqlQuery->fetch(PDO::FETCH_ASSOC)) {
         $res[] = $row;
     }

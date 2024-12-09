@@ -26,13 +26,17 @@ class Store {
     }
 
     public function getBySellerIdStoreId($seller_id, $store_id) {
-        $stmt = $this->conn->prepare("EXEC getBySellerIdStoreId :seller_id, :store_id");
-        $stmt->bindValue(':seller_id', $seller_id, PDO::PARAM_INT);
-        $stmt->bindValue(':store_id', $store_id, PDO::PARAM_INT);
-        $stmt->execute();
-        $result = fetch($stmt);
-        $stmt->closeCursor();
-        return $result;
+        try{
+            $stmt = $this->conn->prepare("EXEC getBySellerIdStoreId :seller_id, :store_id");
+            $stmt->bindValue(':seller_id', $seller_id, PDO::PARAM_INT);
+            $stmt->bindValue(':store_id', $store_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = fetch($stmt);
+            $stmt->closeCursor();
+            return $result;
+        } catch (PDOException $e) {
+            return getResponseArray(400, $e->getMessage(), null);
+        }
     }
 }
 

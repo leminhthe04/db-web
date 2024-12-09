@@ -163,16 +163,6 @@ class Product {
         }
 
         return getResponseArray(200, "Product soft deleted (by changing status to 'Stop Selling')", null);
-
-        // try {
-        //     $stmt = $this->conn->prepare("CALL deleteById('products', ?);");
-        //     $stmt->bind_param("i", $id);
-        //     $stmt->execute();
-        //     $stmt->close();
-        //     return getResponseArray(200, "Product deleted", null);
-        // } catch (mysqli_sql_exception $e) {
-        //     return getResponseArray(400, $e->getMessage(), null);
-        // }
     }
 
     // public function deleteAll() {

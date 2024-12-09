@@ -1,4 +1,4 @@
-EXEC findAll 'Products';
+USE SpClone;
 GO
 
 
@@ -23,7 +23,6 @@ AS BEGIN
         SELECT 
             C.id AS category_id,
             C.name AS category_name
-            -- CAST(C.name AS NVARCHAR(MAX)) AS category_path
         FROM Categories C
         WHERE C.id = @category_id
 
@@ -31,8 +30,6 @@ AS BEGIN
 
         SELECT 
             C.id AS category_id, C.name AS category_name
-            -- CAST(LC.category_path + ' > ' + 
-            --      C.name AS NVARCHAR(MAX)) AS category_path
         FROM Categories C
         INNER JOIN getListCategory LC 
         ON C.larger_cate_id = LC.category_id
@@ -52,11 +49,11 @@ END;
 GO
 
 
-EXEC showColumns 'ProductInfos';
-GO
+-- EXEC showColumns 'ProductInfos';
+-- GO
 
-EXEC getProductsWithCategoryBranch 1;
-GO
+-- EXEC getProductsWithCategoryBranch 1;
+-- GO
 
 -- EXEC findProuctBreaking 10, 10;
 -- GO
@@ -101,10 +98,10 @@ END;
 GO
 
 
-DECLARE @id INT = 0;
-EXEC insertProduct 2, 3, 'Product 2331', 'Brand 1', 1000, 'Description 1', 10, 1, 'Available', @id OUTPUT;
-SELECT @id;
-GO
+-- DECLARE @id INT = 0;
+-- EXEC insertProduct 2, 3, 'Product 2331', 'Brand 1', 1000, 'Description 1', 10, 1, 'Available', @id OUTPUT;
+-- SELECT @id;
+-- GO
 
 
 -- Thủ tục updateProductName
@@ -196,8 +193,8 @@ END;
 GO
 
 
-SELECT * FROM ProductInfos;
-GO
+-- SELECT * FROM ProductInfos;
+-- GO
 
 
 
@@ -212,13 +209,13 @@ GO
 -- GO
 
 
-SELECT *
-FROM products
-ORDER BY seller_id, store_id, id;
+-- SELECT *
+-- FROM products
+-- ORDER BY seller_id, store_id, id;
 
 
-SELECT *
-FROM products
-ORDER BY seller_id, store_id, id -- Cần có ORDER BY để sử dụng OFFSET-FETCH
-OFFSET 10 ROWS              -- Bắt đầu từ bản ghi thứ 11 (OFFSET là số lượng bản ghi cần bỏ qua)
-FETCH NEXT 10 ROWS ONLY;    -- Lấy 10 bản ghi tiếp theo
+-- SELECT *
+-- FROM products
+-- ORDER BY seller_id, store_id, id -- Cần có ORDER BY để sử dụng OFFSET-FETCH
+-- OFFSET 10 ROWS              -- Bắt đầu từ bản ghi thứ 11 (OFFSET là số lượng bản ghi cần bỏ qua)
+-- FETCH NEXT 10 ROWS ONLY;    -- Lấy 10 bản ghi tiếp theo

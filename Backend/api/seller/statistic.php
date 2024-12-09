@@ -17,18 +17,18 @@ $data_json = file_get_contents('php://input');
 $data = json_decode($data_json, true);
 
 
-$from_date = $data['from_date'];
+$from_date = $data['from'];
 if(!$from_date){
     return setStatusCodeAndEchoJson(400, 'From date is required', null);
 }
 
-$to_date = $data['to_date'];
-if($!to_date){
+$to_date = $data['to'];
+if(!$to_date){
     return setStatusCodeAndEchoJson(400, 'To date is required', null);
 }
 
 
 $sellerController = new SellerController();
-$respone = $sellerController->getStatistic($id, $from_date, $to_date);
+$respone = $sellerController->getStatisticById($id, $from_date, $to_date);
 setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

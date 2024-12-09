@@ -1,7 +1,7 @@
-USE master;
-IF EXISTS (SELECT name FROM sys.databases WHERE name = 'SpClone')
-    DROP DATABASE SpClone;
-GO
+-- USE master;
+-- IF EXISTS (SELECT name FROM sys.databases WHERE name = 'SpClone')
+--     DROP DATABASE SpClone;
+-- GO
 
 CREATE DATABASE SpClone;
 GO
@@ -436,35 +436,22 @@ GO
 
 
 
+-- SELECT * FROM Orders;
+
+-- SELECT * FROM Boxes
+-- WHERE order_id = 1;
 
 
-
-
-
-
-
-
-
-
-
-
-
-SELECT * FROM Orders;
-
-SELECT * FROM Boxes
-WHERE order_id = 1;
-
-
--- show all FK constraints
-SELECT 
-    f.name AS FK_Name,
-    OBJECT_NAME(f.parent_object_id) AS Table_Name,
-    COL_NAME(fc.parent_object_id, fc.parent_column_id) AS Column_Name,
-    OBJECT_NAME (f.referenced_object_id) AS Referenced_Table_Name,
-    COL_NAME(fc.referenced_object_id, fc.referenced_column_id) AS Referenced_Column_Name
-FROM
-    sys.foreign_keys AS f
-    INNER JOIN sys.foreign_key_columns AS fc
-    ON f.object_id = fc.constraint_object_id
-ORDER BY
-    FK_Name;
+-- -- show all FK constraints
+-- SELECT 
+--     f.name AS FK_Name,
+--     OBJECT_NAME(f.parent_object_id) AS Table_Name,
+--     COL_NAME(fc.parent_object_id, fc.parent_column_id) AS Column_Name,
+--     OBJECT_NAME (f.referenced_object_id) AS Referenced_Table_Name,
+--     COL_NAME(fc.referenced_object_id, fc.referenced_column_id) AS Referenced_Column_Name
+-- FROM
+--     sys.foreign_keys AS f
+--     INNER JOIN sys.foreign_key_columns AS fc
+--     ON f.object_id = fc.constraint_object_id
+-- ORDER BY
+--     FK_Name;

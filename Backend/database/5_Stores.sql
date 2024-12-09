@@ -1,3 +1,6 @@
+USE SpClone;
+GO
+
 CREATE OR ALTER PROCEDURE getBySellerId
     @seller_id INT,
     @offset INT = 0,

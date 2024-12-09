@@ -21,14 +21,17 @@ class Category {
     }
 
     public function getById($id) {
-        $stmt = $this->conn->prepare("EXEC findById :tableName, :id");
-
-        $stmt->bindValue(':tableName', 'categories', PDO::PARAM_STR);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $result = fetch($stmt);
-        $stmt->closeCursor();
-        return $result;
+        try{ 
+            $stmt = $this->conn->prepare("EXEC findById :tableName, :id");
+            $stmt->bindValue(':tableName', 'categories', PDO::PARAM_STR);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = fetch($stmt);
+            $stmt->closeCursor();
+            return $result;
+        } catch (PDOException $e) {
+            return getResponseArray(400, $e->getMessage(), null);
+        }
     }
 
     // public function insertCategory($name) {
