@@ -1,10 +1,10 @@
-export default function Store({orderList, storeData}) {
+export default function Store({orderList, storeName, storeRevenue, orderCount}) {
 
     return (
         <>
             <div className="store1-name font-bold text-lg ">
-                <div className="inline-block bg-gray-200 p-2">Cửa hàng iTalic</div>
-                <span className="font-sm italic font-normal px-2">11, Đường Lý Thường Kiệt, Quận 10, TP.HCM</span>
+                <div className="inline-block bg-gray-200 p-2">{storeName}</div>
+                <span className="font-sm italic font-normal px-2"> Doanh thu: {storeRevenue} <span className="inline-block w-2"></span> | <span className="inline-block w-2"></span>  {orderCount} đơn hàng</span>
             </div>
             <table className="w-10/12 justify-start items-start text-center text-bold text-xl mx-auto">
                 <thead>
@@ -16,14 +16,16 @@ export default function Store({orderList, storeData}) {
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.from({ length: 2 }, (_, i) => (
-                        <tr className="h-14 border rounded-e-sm">
-                             <td className="w-1/12">{i+1}</td>
-                            <td className="w-1/12">#001</td>
-                            <td className="w-1/12">100.000 VND</td>
-                            <td className="w-1/12">12-02-1004</td>
-                        </tr>
-                    ))}
+                    { orderList.map((order, index) => {
+                        return (
+                            <tr className="h-14 border rounded-e-sm">
+                                <td className="w-1/12">{index +1 }</td>
+                                <td className="w-1/12">{order.order_id}</td>
+                                <td className="w-1/12">{order.order_revenue}</td>
+                                <td className="w-1/12">{order.packing_date}</td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
         </>

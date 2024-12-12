@@ -4,6 +4,7 @@ import ProductsManagement from "./pages/ProductsManagement";
 import NewProduct from "./pages/NewProduct";
 import SellerDetail from "./pages/SellerDetail";
 import UsersManagement from "./pages/UsersManagement";
+import ProductUpdate from "./pages/ProductUpdate";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ProductsManagement />} />
           <Route path="/product-new" element={<NewProduct />} />
+          <Route path="/edit-product/:productID" element={<ProductUpdate />} />
           {/* <Route path="/admin//product-update" element={<ProductUpdate />} /> */}
           <Route path="/seller-detail/:sellerID" element={<SellerDetail />} />
           <Route path="/seller-management" element={<UsersManagement />} />

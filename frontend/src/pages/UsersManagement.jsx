@@ -1,174 +1,37 @@
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 import axios from "axios";
-import Pagination from "../components/Pagination";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-
-// const userData = [{
-//     "uid": "2212254",
-//     "username": "ngoc",
-//     "upassword": "123456",
-//     "fname": "Ngọc",
-//     "lname": "Huỳnh",
-//     "email": "ngoc@gmail.com",
-//     "gender": "female",
-//     "usertype": "customer",
-//     "ranking": "silver",
-//     "birthday": "2004-07-02T17:00:00.000Z",
-//     "total_payment": 0,
-//     "id_no": "083304003958"
-// },
-// {
-//     "uid": "2212254",
-//     "username": "ngoc",
-//     "upassword": "123456",
-//     "fname": "Ngọc",
-//     "lname": "Huỳnh",
-//     "email": "ngoc@gmail.com",
-//     "gender": "female",
-//     "usertype": "customer",
-//     "ranking": "silver",
-//     "birthday": "2004-07-02T17:00:00.000Z",
-//     "total_payment": 0,
-//     "id_no": "083304003958"
-// },
-// {
-//     "uid": "2212254",
-//     "username": "ngoc",
-//     "upassword": "123456",
-//     "fname": "Ngọc",
-//     "lname": "Huỳnh",
-//     "email": "ngoc@gmail.com",
-//     "gender": "female",
-//     "usertype": "customer",
-//     "ranking": "silver",
-//     "birthday": "2004-07-02T17:00:00.000Z",
-//     "total_payment": 0,
-//     "id_no": "083304003958"
-// }, {
-//     "uid": "2212254",
-//     "username": "ngoc",
-//     "upassword": "123456",
-//     "fname": "Ngọc",
-//     "lname": "Huỳnh",
-//     "email": "ngoc@gmail.com",
-//     "gender": "female",
-//     "usertype": "customer",
-//     "ranking": "silver",
-//     "birthday": "2004-07-02T17:00:00.000Z",
-//     "total_payment": 0,
-//     "id_no": "083304003958"
-// },
-// {
-//     "uid": "323322afdsfa",
-//     "username": "anhthu",
-//     "upassword": "12345",
-//     "fname": "Bui",
-//     "lname": "Thu",
-//     "email": "thu@gmail.com",
-//     "gender": "female",
-//     "usertype": "customer",
-//     "ranking": "silver",
-//     "birthday": "1999-12-31T17:00:00.000Z",
-//     "total_payment": 0,
-//     "id_no": null
-// },
-// {
-//     "uid": "0180b798-3e88-4ff4-978a-9e402df8ca89",
-//     "username": "thu",
-//     "upassword": "$2a$12$SiNbtnQEloPKFV4B/QWpxe/UZu3dEbQXzbycJLaLMjQ3v.WNxaYwu",
-//     "fname": "Thu",
-//     "lname": "Bui",
-//     "email": "thu@gmai.com",
-//     "gender": "female",
-//     "usertype": "customer",
-//     "ranking": "silver",
-//     "birthday": "2004-07-02T17:00:00.000Z",
-//     "total_payment": 0,
-//     "id_no": null
-// },
-// {
-//     "uid": "0180b798-3e88-4ff4-978a-9e402df8ca89",
-//     "username": "thu",
-//     "upassword": "$2a$12$SiNbtnQEloPKFV4B/QWpxe/UZu3dEbQXzbycJLaLMjQ3v.WNxaYwu",
-//     "fname": "Thu",
-//     "lname": "Bui",
-//     "email": "thu@gmai.com",
-//     "gender": "female",
-//     "usertype": "customer",
-//     "ranking": "silver",
-//     "birthday": "2004-07-02T17:00:00.000Z",
-//     "total_payment": 0,
-//     "id_no": null
-// },
-// {
-//     "uid": "0180b798-3e88-4ff4-978a-9e402df8ca89",
-//     "username": "thu",
-//     "upassword": "$2a$12$SiNbtnQEloPKFV4B/QWpxe/UZu3dEbQXzbycJLaLMjQ3v.WNxaYwu",
-//     "fname": "Thu",
-//     "lname": "Bui",
-//     "email": "thu@gmai.com",
-//     "gender": "female",
-//     "usertype": "customer",
-//     "ranking": "silver",
-//     "birthday": "2004-07-02T17:00:00.000Z",
-//     "total_payment": 0,
-//     "id_no": null
-// },
-// {
-//     "uid": "0180b798-3e88-4ff4-978a-9e402df8ca89",
-//     "username": "thu",
-//     "upassword": "$2a$12$SiNbtnQEloPKFV4B/QWpxe/UZu3dEbQXzbycJLaLMjQ3v.WNxaYwu",
-//     "fname": "Thu",
-//     "lname": "Bui",
-//     "email": "thu@gmai.com",
-//     "gender": "female",
-//     "usertype": "customer",
-//     "ranking": "silver",
-//     "birthday": "2004-07-02T17:00:00.000Z",
-//     "total_payment": 0,
-//     "id_no": null
-// },
-// {
-//     "uid": "0180b798-3e88-4ff4-978a-9e402df8ca89",
-//     "username": "thu",
-//     "upassword": "$2a$12$SiNbtnQEloPKFV4B/QWpxe/UZu3dEbQXzbycJLaLMjQ3v.WNxaYwu",
-//     "fname": "Thu",
-//     "lname": "Bui",
-//     "email": "thu@gmai.com",
-//     "gender": "female",
-//     "usertype": "customer",
-//     "ranking": "silver",
-//     "birthday": "2004-07-02T17:00:00.000Z",
-//     "total_payment": 0,
-//     "id_no": null
-// }
-
-// ]
+import { useNavigate } from "react-router-dom";
 
 export default function UsersManagement() {
+    const navigate = useNavigate();
     const [totalUser, setTotalUser] = useState(null);
-    const [userData, setUserData] = useState({});
+    const [sellerList, setSellerList] = useState([]);
     const [page, setTotalPage] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
 
-    // useEffect(() => {
-    //     axios.get("http://localhost:8000/api/user/users?limit=10")
-    //         .then((response) => {
-    //             const userData = response.data.data;
-    //             console.log(userData);
-    //             setUserData(userData);
-    //             setTotalUser(response.data[totalUser]);
-    //             setTotalPage(response.data["totalPage"]);
-    //             console.log(page, currentPage)
-    //         })
-    //         .catch((err) => {
-    //             alert(err.msg);
-    //         });
-    // }, [])
+    useEffect(() => {
+        // alert("Hello");
+            axios.post("http://localhost/api/seller/get", {
+                "limit": 9999,
+                "offset": 0
+            })
+            .then((response) => {
+                console.log(response.data.data);
+                const result = response.data.data;
+                // console.log(result.data.data);
+                setSellerList(result);
+                // setTotalUser(response.data[totalUser]);
+                // setTotalPage(response.data["totalPage"]);
+                // console.log(page, currentPage)
+                console.log(result);
+            })
+            .catch((err) => {
+                // alert(err.msg);
+            });
+    }, [])
 
+    console.log("CHECK SELLER LIST: " , sellerList);
 
     function handlePageClick(pageNum) {
         const index = Number(pageNum);
@@ -218,16 +81,24 @@ export default function UsersManagement() {
 
                             </thead>
                             <tbody>
-                                {Array.from({ length: 10 }, (_, i) => (
-                                    <tr className="h-14 rounded-e-sm">
-                                        <td className="w-1/6 text-center ">{i+1}</td>
-                                        <td className="w-1/6 ">Bao Ngoc</td>
-                                        <td className="w-1/6 ">0918199992</td>
-                                        <td className="w-1/6 ">Email</td>
+
+                                {sellerList.map((seller, index) => (
+                                    <>
+                                    <tr className="h-2"></tr>
+                                    <tr className="w-full h-6  text-base" >
+                                        <td className="w-1/6 text-center ">{index + 1}</td>
+                                        <td className="w-1/6 ">{seller.fname + " " + seller.lname}</td>
+                                        <td className="w-1/6 ">{seller.phone}</td>
+                                        <td className="w-1/6 ">{seller.email}</td>
                                         <td className="w-1/6">
-                                            <a href="" className=" border-2 border-green-500 px-3 rounded-md bg-green-100 font-semibold text-green-700 py-1">Chi tiết</a>
+                                            <button className="bg-green-600 text-white px-4 py-1 rounded-lg"
+                                                onClick={() => {navigate(`/seller-detail/${seller.id}`)}}
+                                            >Chi tiết</button>    
                                         </td>
+
                                     </tr>
+                                    </>
+                                   
                                 ))}
                             </tbody>
                         </table>

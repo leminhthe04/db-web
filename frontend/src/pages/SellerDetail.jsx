@@ -10,22 +10,53 @@ import Store from "../components/Store";
 
 
 export default function SellerDetail() {
-    // const {id} = useParams();
-    // const [userDetail, setUserDetail] = useState({});
-    // useEffect(() => {
-    //     axios.get(`http://localhost:8000/api/user/get-detail/${id}`)
-    //         .then((response) => {
-    //             const detail = response.data.data;
-    //             setUserDetail(detail);
-    //         })
-    //         .catch((error) => {
-    //             if (error.response) {
-    //                 alert(error.response.data.msg);
-    //             } else {
-    //                 console.error('Error:', error.message);
-    //             }
-    //         })
-    // }, [])
+    const {sellerID} = useParams();
+    const [sellerName, setSellerlName] = useState(null);
+    const [sellerPhone, setSellerPhone] = useState(null);
+    const [sellerEmail, setSellerEmail] = useState(null);
+    const [revenue, setRevenue] = useState(null); 
+    const [totalOrder, setTotalOrder] = useState(null);
+    const [totalStore, setTotalStore] = useState(null);
+    const [startYear, setStartYear] = useState(null);  
+    const [startMonth, setStartMonth] = useState(null); 
+    const [startDay, setStartDay] = useState(null);
+
+    const [endYear, setEndYear] = useState(null);   
+    const [endMonth, setEndMonth] = useState(null);
+    const [endDay, setEndDay] = useState(null);
+
+    const [storeList, setStoreList] = useState([]); 
+
+
+
+
+
+
+    useEffect(() => {
+            axios.post(`http://localhost/api/seller/statistic/${sellerID}`, {
+                from: "1990-01-01",
+                to: "2025-01-01"
+            })
+            .then((response) => {
+                const result = response.data.data;
+                console.log(result);
+                setSellerlName(result.seller_name);
+                setSellerPhone(result.seller_phone);
+                setSellerEmail(result.seller_email);
+                setRevenue(result.seller_revenue); 
+                setTotalStore(result.count_store);
+                setTotalOrder(result.count_order);
+                setStoreList(result.stores_statistic );
+
+            })
+            .catch((error) => {
+                if (error.response) {
+                    // alert(error.response.data.msg);
+                } else {
+                    console.error('Error:', error.message);
+                }
+            })
+    }, [])
     const [showStartPicker, setShowStartPicker] = useState(false);
     const [showEndPicker, setShowEndPicker] = useState(false);
     const [startDate, setStartDate] = useState(null); 
@@ -40,6 +71,41 @@ export default function SellerDetail() {
         setEndDate(date); 
         setShowEndPicker(false);
     };
+
+    function handleFilter() {
+        const startTime = `${startYear}-${startMonth}-${startDay}`;
+        const endTime  = `${endYear}-${endMonth}-${endDay}`;
+        // if(!startDate || !endDate) {
+        //     alert("Chưa chọn ngày");
+        //     return;
+        // }
+
+
+        console.log("CHECK START DATE: ", startTime, endTime);
+
+        axios.post(`http://localhost/api/seller/statistic/${sellerID}`, {
+            from: startTime,
+            to: endTime
+        })
+        .then((response) => {
+            const result = response.data.data;
+            console.log(result);
+            setSellerlName(result.seller_name);
+            setSellerPhone(result.seller_phone);
+            setSellerEmail(result.seller_email);
+            setRevenue(result.seller_revenue); 
+            setTotalStore(result.count_store);
+            setTotalOrder(result.count_order);
+            setStoreList(result.stores_statistic );
+        })
+        .catch((error) => {
+            if (error.response) {
+                // alert(error.response.data.msg);
+            } else {
+                console.error('Error:', error.message);
+            }
+        })
+    }
 
     return (
         <>
@@ -57,20 +123,20 @@ export default function SellerDetail() {
                                 <label htmlFor="name">Tên</label>
                                 <div className="pl-2 bg-gray-100 rounded-ms p-1 text-gray-600">
                                     {/* {userDetail.lname + " " + userDetail.fname} */}
-                                    Lê Minh Thế đáng ghét
+                                    {sellerName}
                                 </div>
                             </div>
                             <div className="space-y-1">
                                 <label htmlFor="name">Số điện thoại</label>
                                 <div className="pl-2 bg-gray-100 rounded-ms p-1 text-gray-600">
                                     {/* {userDetail.email} */}
-                                    0942047349
+                                    {sellerPhone}
                                 </div>
                             </div>
                             <div className="space-y-1">
                                 <label htmlFor="name">Email</label>
                                 <div className="pl-2 bg-gray-100 rounded-ms p-1 text-gray-600">
-                                    theleminh@gmail.com
+                                    {sellerEmail}
                                 </div>
                             </div>
 
@@ -85,14 +151,14 @@ export default function SellerDetail() {
                                     <div className="text-lg"> Tổng doanh thu </div>
                                     <div className="font-bold text-3xl">
                                         {/* {new Intl.NumberFormat('vi-VN').format(userDetail.total_payment)} */}
-                                        10.000.000
+                                        {revenue}
                                     </div>
                                 </div>
                                 <div>
                                     <div className="text-lg"> Tổng đơn hàng </div>
                                     <div className="font-bold text-3xl text-right">
                                         {/* {new Intl.NumberFormat('vi-VN').format(userDetail.total_payment)} */}
-                                        20
+                                        {totalOrder}
                                     </div>
                                 </div>
 
@@ -108,14 +174,34 @@ export default function SellerDetail() {
                 </div>
                 <div>
 
-                    <div className="mr-40 flex justify-end space-x-40">
+                    <div className="mr-40 flex justify-end space-x-40 ml-40">
                         <div>
                             <span>Ngày bắt đầu: </span>
-                            <button
+                            <div  className="inline-block w-96 flex">
+                                <span>
+                                    <input placeholder="YYYY"
+                                        value={startYear}
+                                        onChange={(e) => setStartYear(e.target.value)}
+                                    />
+                                </span>/
+                                <span>
+                                    <input placeholder="MM"
+                                        value={startMonth}
+                                        onChange={(e) => setStartMonth(e.target.value)}
+                                    />
+                                </span>/
+                                <span>
+                                    <input placeholder="DD"
+                                        value={startDay}
+                                        onChange={(e) => setStartDay(e.target.value)}
+                                    />
+                                </span>
+                            </div>
+                            {/* <button
                                 onClick={() => setShowStartPicker((prev) => !prev)}
                                 className="px-4 py-2 bg-blue-500 text-white rounded"
                             >
-                                {startDate ? startDate.toLocaleDateString('vi-VN') : 'Chọn ngày'}
+                                {startDate ? startDate.toISOString().split('T')[0] : 'Chọn ngày'}
                             </button>
 
                             {showStartPicker && (
@@ -126,15 +212,35 @@ export default function SellerDetail() {
                                         onSelect={handleStartDate}
                                     />
                                 </div>
-                            )}
+                            )} */}
                         </div>
-                        <div>
+                        <div className="" >
                              <span>Ngày kết thúc: </span>
-                            <button
+                             <div className="inline-block w-96 flex">
+                                <span className="">
+                                    <input placeholder="YYYY"
+                                        value={endYear}
+                                        onChange={(e) => setEndYear(e.target.value)}
+                                    />
+                                </span>/
+                                <span>
+                                    <input placeholder="MM"
+                                        value={endMonth}
+                                        onChange={(e) => setEndMonth(e.target.value)}
+                                    />
+                                </span>/
+                                <span>
+                                    <input placeholder="DD"
+                                        value={endDay}
+                                        onChange={(e) => setEndDay(e.target.value)}
+                                    />
+                                </span>
+                            </div>
+                            {/* <button
                                 onClick={() => setShowEndPicker((prev) => !prev)}
                                 className="px-4 py-2 bg-blue-500 text-white rounded"
                             >
-                                {endDate ? endDate.toLocaleDateString('vi-VN') : 'Chọn ngày'}
+                                {endDate ? endDate.toISOString().split('T')[0] : 'Chọn ngày'}
                             </button>
 
                             {showEndPicker && (
@@ -145,17 +251,23 @@ export default function SellerDetail() {
                                         onSelect={handleEndDate}
                                     />
                                 </div>
-                            )}
+                            )} */}
                         </div>
                     </div>
-
-                    <div className="store-1 w-11/12 mx-auto mt-6">
-                        <Store />
+                    <div className="flex justify-end mt-4"
+                        onClick={handleFilter}
+                    >
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mr-40">Xem thống kê</button>
                     </div>
+                            
+                    {/* e({orderList, storeName, storeRevenue, orderCount}) */}
+                    {storeList.map((store, index) => (
+                        <div className="store-1 w-11/12 mx-auto mt-6">
+                            <Store storeName={store.store_name} orderCount={store.count_order} storeRevenue={store.revenue} orderList={store.orders} />
+                        </div>
+                    ))}
 
-                    <div className="store-1 w-11/12 mx-auto mt-6">
-                        <Store />
-                    </div>
+
 
 
                 </div>
