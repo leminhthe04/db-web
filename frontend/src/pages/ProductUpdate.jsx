@@ -5,204 +5,123 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function ProductUpdate() {
-    const { id } = useParams();
+    const { productID } = useParams();
+    console.log(productID);
     // alert(id);
     const navigate = useNavigate();
     // IMAGE
-    const [fileImg, setFileImg] = useState([
-        null, null, null, null, null, null
-    ])
-    const [img1, setImg1] = useState("");
-    const [img2, setImg2] = useState("");
-    const [img3, setImg3] = useState("");
-    const [img4, setImg4] = useState("");
-    const [img5, setImg5] = useState("");
-    const [img6, setImg6] = useState("");
 
     // PRODUCT VALUE
-    const [productName, setProductName] = useState("");
-    const [selectCat, setSelectCat] = useState(false);
-    const [brand, setBrand] = useState("");
-    const [description, setDiscription] = useState(false);
+    const [catList, setCatList] = useState([]);
+    const [name, setname] = useState(null);
+    const [store_name, setstore_name] = useState(null);
+    const [seller_name, setseller_name] = useState(null);
+    const [brand, setBrand] = useState(null);
+    const [selectCat, setSelectCat] = useState(null);
+    const [description, setDiscription] = useState(null);
     const [price, setPrice] = useState(null);
+    const [category, setCategory] = useState(null);
+    const [categoryName, setCategoryName] = useState(null);
     const [quantity, setQuantity] = useState(null);
+    const [status, setStatus] = useState(null);
 
     // FUNCTION
-    // useEffect(() => {
-    //     axios.get(`http://localhost:8000/api/product/get-detail/${id}`)
-    //         .then((reponse) => {
-    //             const prodDetail = reponse.data.data;
-    //             // alert("sfasfdsa");
-    //             console.log(prodDetail);
-    //             setProductName(prodDetail.pname)
-    //             setBrand(prodDetail.brand)
-    //             setPrice(prodDetail.price)
+    // useEffect(async () => {
+    //     // Sử dụng Promise.all để gọi nhiều request đồng thời
+    //     // Promise.all([
+    //     //     axios.get(`http://localhost:8000/api/product/get-detail/${id}`),
+    
+    //     // ])
+    //         axios.get(`http://localhost/api/product/detail/${productID}`)
+    //             .then((response) => {
+    //             const prodDetail = response.data.data[0];
+    //             console.log("Check product detail: ", prodDetail);
+    //             // Set thông tin sản phẩm
+    //             setname(prodDetail.name);
+    //             // setstore_name(prodDetail.store_name);
+    //             // setseller_name(prodDetail.seller_name);
+    //             setBrand(prodDetail.brand);
     //             setDiscription(prodDetail.description);
+    //             setPrice(prodDetail.price);
+    //             setCategory(prodDetail.category);
     //             setQuantity(prodDetail.quantity);
+    //             setStatus(prodDetail.status);
+                 
+    //             const sellerData = await axios.get(`http://localhost/api/seller/detail/${prodDetail.seller_id}`);
     //         })
-    //         .then(() => {
-    //             axios.get(`http://localhost:8000/api/product/GetImageByProduct/${id}`)
-    //                 .then((reponse) => {
-    //                     const prodArray = reponse.data.data;
+    //         .catch((error) => {
+    //             console.error('Error fetching data:', error);
+    //         });
+    // }, []);
 
-    //                     prodArray.forEach((prod, index) => {
-    //                         if (index == 1) {
-    //                             setImg1(prod.image_url);
-    //                         } else if (index == 2) {
-    //                             setImg2(prod.image_url);
-    //                         } else if (index == 3) {
-    //                             setImg3(prod.image_url);
-    //                         } else if (index == 4) {
-    //                             setImg4(prod.image_url);
-    //                         } else if (index == 5) {
-    //                             setImg5(prod.image_url);
-    //                         } else if (index == 6) {
-    //                             setImg6(prod.image_url);
-    //                         }
-    //                     })
-    //                     // setImg1(prodDetail.image[0]);
-    //                     // setImg2(prodDetail.image[1]);
-    //                     // setImg3(prodDetail.image[2]);
-    //                     // setImg4(prodDetail.image[3]);
-    //                     // setImg5(prodDetail.image[4]);
-    //                     // setImg6(prodDetail.image[5]);
-    //                 })
-    //         })
-
-
-    // }, [])
     useEffect(() => {
-        // Sử dụng Promise.all để gọi nhiều request đồng thời
-        Promise.all([
-            axios.get(`http://localhost:8000/api/product/get-detail/${id}`),
-            axios.get(`http://localhost:8000/api/product/GetImageByProduct/${id}`)
-        ])
-            .then(([prodDetailResponse, prodImagesResponse]) => {
-                const prodDetail = prodDetailResponse.data.data;
-                const prodArray = prodImagesResponse.data.data;
+        const fetchData = async () => {
+          try {
+            // Lấy chi tiết sản phẩm
+            const productResponse = await axios.get(`http://localhost/api/product/detail/${productID}`);
+            const prodDetail = productResponse.data.data[0];
+            console.log("Check product detail: ", prodDetail);
+      
+            // Set thông tin sản phẩm
+            setname(prodDetail.product_name);
+            setBrand(prodDetail.brand);
+            setDiscription(prodDetail.description);
+            setPrice(prodDetail.price);
+            setCategory(prodDetail.category_id);
+            setCategoryName(prodDetail.category_name);
+            setQuantity(prodDetail.quantity);
+            setStatus(prodDetail.status);
+            setseller_name(prodDetail.seller_name);
+            setstore_name(prodDetail.store_name);
+            
+            const catData = await axios.get(`http://localhost/api/category/all`);
+            console.log("Check cat data: ", catData.data.data);
+            setCatList(catData.data.data);
 
-                // Set thông tin sản phẩm
-                setProductName(prodDetail.pname);
-                setBrand(prodDetail.brand);
-                setPrice(prodDetail.price);
-                setDiscription(prodDetail.description);
-                setQuantity(prodDetail.quantity);
-
-                // Set hình ảnh
-                prodArray.forEach((prod, index) => {
-                    if (index === 1) setImg1(prod.image_url);
-                    else if (index === 2) setImg2(prod.image_url);
-                    else if (index === 3) setImg3(prod.image_url);
-                    else if (index === 4) setImg4(prod.image_url);
-                    else if (index === 5) setImg5(prod.image_url);
-                    else if (index === 6) setImg6(prod.image_url);
-                });
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
-    }, []);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+      
+        fetchData(); // Gọi hàm con
+      }, []); // Thêm `productID` vào dependency array
+      
 
 
-
-    function handleChangeImg1() {
-        document.getElementById('img1').click();
-    }
-    function handleChangeImg(index) {
-        document.getElementById(`img${index}`).click();
-    }
-
-    function onChangeImg(e, index) {
-        const file = e.target.files[0];
-        let base64String;
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                base64String = reader.result;
-                // setImg1(base64String);
-                setFileImg((prev) => {
-                    if (Array.isArray(prev)) {
-                        const updatedFileImg = [...prev];
-                        updatedFileImg[index - 1] = file;
-                        return updatedFileImg;
-                    }
-                    return [file];
-                });
-                if (index == 1) {
-                    setImg1(base64String);
-                }
-                else if (index == 2) {
-                    setImg2(base64String);
-                }
-                else if (index == 3) {
-                    setImg3(base64String);
-
-                } else if (index == 4) {
-                    setImg4(base64String);
-                } else if (index == 5) {
-                    setImg5(base64String);
-                } else if (index == 6) {
-                    setImg6(base64String);
-                }
-                localStorage.setItem(`img${index}`, base64String);
-            };
-            setFileImg((prevFile) => ({ ...prevFile, i1: file }));
-            reader.readAsDataURL(file);
-
-        }
-    }
-
-    function handleDeleteImage(index) {
-        if (index == 1) {
-            setImg1(null);
-        } else if (index == 2) {
-            setImg2(null);
-        } else if (index == 3) {
-            setImg3(null);
-        } else if (index == 4) {
-            setImg4(null);
-        } else if (index == 5) {
-            setImg5(null);
-        } else if (index == 6) {
-            setImg6(null);
-        }
-    }
 
     function handleSelectCat(e) {
         setSelectCat(e.target.value != "");
     }
 
-    function handleChangeDescription(e) {
-        if (e.target.value.length > 0) setDiscription(true)
-        else setDiscription(false);
-    }
+    // function handleChangeDescription(e) {
+    //     if (e.target.value.length > 0) setDiscription(true)
+    //     else setDiscription(false);
+    // }
 
     function hanldeUpdateProduct() {
         const updateProd = {
+            "name": name,
             "brand": brand,
-            "price": price,
+            "price": Number(price),
             "description": description,
-            "quantity": quantity,
-            "cate_id": selectCat
+            "quantity": Number(quantity),
+            "category_id": category,
+            "status": status
         }
 
         console.log(updateProd);
 
 
-        axios.put(`http://localhost:8000/api/product/UpdateProduct/${id}`, updateProd, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            })
+        axios.post(`http://localhost/api/product/update/${productID}`, updateProd)
             .then((response) => {
                 // console.log("Check tên sp: ", productName);
-                // console.log(response);
+                console.log(response);
                 alert("Cập nhật sản phẩm thành công!");
-                navigate("/admin/product-manage")
+                navigate("/")
             })
             .catch((error) => {
                 console.log(error);
-                navigate("/admin/product-manage")
+                navigate("/")
                 // if (error.response) {
                 //     alert(error.response.data.msg);
                 // } else {
@@ -217,34 +136,51 @@ export default function ProductUpdate() {
             <Header page="product-manage" role="admin" />
             <main>
                 <div className="m-4 mb-10">
-                    <span className="text-gray-600">Shop /</span><span /> <span className="font-medium">Add Products</span>
+                    <span className="text-gray-600">Shop /</span><span /> <span className="font-medium">Update Products</span>
                 </div>
 
                 <div className="grid grid-cols-2">
                     <div className="mx-auto w-4/5">
-                        <h2 className="font-medium text-3xl" >Chỉnh sửa sản phẩm</h2>
+                        <h2 className="font-medium text-3xl" >Sửa sản phẩm</h2>
                         <div className="my-6">
                             <label>Tên sản phẩm <span className="text-red-600">*</span></label>
                             <input type="text" name="pname" className={`pl-4 bg-gray-100 block w-4/5 h-8 my-2 rounded-md `}
-                                disabled
-                                value={productName}
+                                onChange={(e) => { setname(e.target.value) }}
+                                value={name}
                             />
+                            
+                        </div>
+
+                        <div className="my-6 grid grid-cols-2 gap-2 w-4/5">
+
+                            <div >
+                                <label>Người bán</label>
+                                <div className="px-2 block w-4/5 h-8 my-2 rounded-md bg-gray-300 " >
+                                    <span>{seller_name}</span>
+                                </div>
+                            </div>
+
+                            <div >
+                                <label>Cửa hàng</label>
+                                <div className="px-2 block w-4/5 h-8 my-2 rounded-md bg-gray-300 " >
+                                    <span>{store_name}</span>
+                                </div>
+                            </div>
+
+                            
                         </div>
 
 
                         <div className="my-6">
-                            <label>Phân loại<span className="text-red-600">*</span></label>
-                            <select name="category" 
-                                    className={`block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100 ${selectCat ? 'bg-blue-100' : 'bg-gray-100'} `} 
-                                    onChange={(e) => handleSelectCat(e)}
-                                    value={selectCat}    
+                            <label>Danh mục<span className="text-red-600">*</span></label>
+                            <select name="category" className={`px-2 block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100 ${selectCat ? 'bg-blue-100' : 'bg-gray-100'} `} 
+                                onChange={(e) => setCategory(e.target.value)}
+                                value={category}
                             >
                                 <option value="" disabled>Chọn loại sản phẩm</option>
-                                <option value="c01" onClick={(e) => { setSelectCat("c01") }}>Điện thoại</option>
-                                <option value="c02" onClick={(e) => { setSelectCat("c02") }}>Laptop</option>
-                                <option value="c03" onClick={(e) => { setSelectCat("c03") }}>Máy tính bảng</option>
-                                <option value="c04" onClick={(e) => { setSelectCat("c04") }}>Đồng hồ</option>
-                                <option value="c05" onClick={(e) => { setSelectCat("c05") }}>Phụ kiện</option>
+                                {catList.length > 0 && catList.map((cat) => (
+                                    <option value={cat.id} key={cat.id} >{cat.name}</option>
+                                    ))}
                             </select>
                         </div>
 
@@ -273,103 +209,41 @@ export default function ProductUpdate() {
                         </div>
 
                         <div className="my-6">
+                            <label>Trạng thái <span className="text-red-600">*</span></label>
+                            <select name="status" className={`px-2 block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100 ${selectCat ? 'bg-blue-100' : 'bg-gray-100'} `} 
+                                onChange={(e) => setStatus(e.target.value)}
+                                value={status}
+                            >
+                                <option value="Available" >Available</option>
+                               <option value="Stop Selling">Stop Selling</option>
+                               <option value="Sold Out">Sold Out</option>
+                               
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <div className="mx-auto w-full">
+                        <div className="my-6">
                             <label>Mô tả sản phẩm<span className="text-red-600">*</span></label>
-                            <textarea name="price" className={`p-4 block w-4/5 h-36 my-2 rounded-md hover:bg-blue-100 ${description ? "bg-blue-100" : "bg-gray-100"}`}
-                                onChange={(e) => handleChangeDescription(e)} 
+                            <textarea name="price" className={`p-4 block w-4/5 h-80 my-2 rounded-md hover:bg-blue-100 ${description ? "bg-blue-100" : "bg-gray-100"}`}
+                                onChange={(e) => setDiscription(e.target.value)}
                                 value={description}
                             />
+                        
+                        </div>
+
+                        <div className="w-full flex justify-center items-center"
+                            onClick={() => hanldeUpdateProduct()}
+                        >
+                            <button className="bg-red-500 text-white p-2 rounded-md pr-3 block mr-40">Cập nhật</button>
                         </div>
                     </div>
 
-                    <div>
-                        <h2 className="font-medium text-3xl pb-4" >Chỉnh sửa hình ảnh</h2>
 
-                        <div class="grid grid-cols-3 gap-2 mr-8">
-                            <div>
-                                <div className="relative block m-auto h-auto rounded-lg justify-center">
-                                    <img src={img1 ? img1 : "../../public/img_upload.svg"} alt="" name="img1" onClick={() => { document.getElementById('img1').click() }} className="w-72 h-80 block object-contain rounded-lg" />
-                                    <button
-                                        onClick={() => { handleDeleteImage(1) }}
-                                        className={`${img1 ? "" : "hidden"}  absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 items-center justify-center hover:bg-red-800 `}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                                <input id="img1" type="file" accept="image/*" className="hidden" onChange={(e) => { onChangeImg(e, 1) }} />
-                            </div>
-                            <div>
-                                <div className="relative block m-auto h-auto rounded-lg justify-center">
-                                    <img src={img2 ? img2 : "../../public/img_upload.svg"} alt="" name="img2" onClick={() => { document.getElementById('img2').click() }} className="w-72 h-80 block object-contain rounded-lg" />
-                                    <button
-                                        onClick={() => { handleDeleteImage(2) }}
-                                        className={`${img2 ? "" : "hidden"}  absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 items-center justify-center hover:bg-red-800 `}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                                <input id="img2" type="file" accept="image/*" className="hidden" onChange={(e) => { onChangeImg(e, 2) }} />
-                            </div>
-                            <div>
-                                <div className="relative block m-auto h-auto rounded-lg justify-center">
-                                    <img src={img3 ? img3 : "../../public/img_upload.svg"} alt="" name="img3" onClick={() => { document.getElementById('img3').click() }} className="w-72 h-80 block object-contain rounded-lg" />
-                                    <button
-                                        onClick={() => { handleDeleteImage(3) }}
-                                        className={`${img3 ? "" : "hidden"}  absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 items-center justify-center hover:bg-red-800 `}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                                <input id="img3" type="file" accept="image/*" className="hidden" onChange={(e) => { onChangeImg(e, 3) }} />
-                            </div>
-                            <div>
-                                <div className="relative block m-auto h-auto rounded-lg justify-center">
-                                    <img src={img4 ? img4 : "../../public/img_upload.svg"} alt="" name="img4" onClick={() => { document.getElementById('img4').click() }} className="w-72 h-80 block object-contain rounded-lg" />
-                                    <button
-                                        onClick={() => { handleDeleteImage(4) }}
-                                        className={`${img4 ? "" : "hidden"}  absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 items-center justify-center hover:bg-red-800 `}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                                <input id="img4" type="file" accept="image/*" className="hidden" onChange={(e) => { onChangeImg(e, 4) }} />
-                            </div>
-
-                            <div>
-                                <div className="relative block m-auto h-auto rounded-lg justify-center">
-                                    <img src={img5 ? img5 : "../../public/img_upload.svg"} alt="" name="img5" onClick={() => { document.getElementById('img5').click() }} className="w-72 h-80 block object-contain rounded-lg" />
-                                    <button
-                                        onClick={() => { handleDeleteImage(5) }}
-                                        className={`${img5 ? "" : "hidden"}  absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 items-center justify-center hover:bg-red-800 `}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                                <input id="img5" type="file" accept="image/*" className="hidden" onChange={(e) => { onChangeImg(e, 5) }} />
-                            </div>
-
-                            <div>
-                                <div className="relative block m-auto h-auto rounded-lg justify-center">
-                                    <img src={img6 ? img6 : "../../public/img_upload.svg"} alt="" name="img6" onClick={() => { document.getElementById('img6').click() }} className="w-72 h-80 block object-contain rounded-lg" />
-                                    <button
-                                        onClick={() => { handleDeleteImage(6) }}
-                                        className={`${img6 ? "" : "hidden"}  absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 items-center justify-center hover:bg-red-800 `}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                                <input id="img6" type="file" accept="image/*" className="hidden" onChange={(e) => { onChangeImg(e, 6) }} />
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end mr-20 mb-10">
-                            <div className="bg-red-500 text-white w-44 p-4 text-center rounded-md ml-8" onClick={hanldeUpdateProduct} >Cập nhật sản phẩm</div>
-                        </div>
-
-                    </div>
                 </div>
             </main>
 
-            <Footer />
         </>
     )
 }
