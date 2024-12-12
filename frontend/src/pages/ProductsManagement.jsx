@@ -6,22 +6,65 @@ import Pagination from "../components/Pagination";
 import ProductUpdate from "./ProductUpdate";
 import { useNavigate } from "react-router-dom";
 
-// const productList = [
-//     {
-//         pname: "Sản phẩm 1",
-//         pdescription: "Mô tả sản phẩm",
-//         catory: "Điện thoại",
-//         shop: "Cửa hàng của mèo",
-//         seller: "Mèo",
-//         sold_quantity: 100,
-//         rating: 1.2
-//     }
-// ]
+const result = {
+    "status": 200,
+    "msg": "Found products",
+    "data": [
+        {
+            "product_id": "49",
+            "product_name": "An Ao dai Viet Nam",
+            "price": "15000.00",
+            "quantity": "50",
+            "category_id": "21",
+            "category_name": "Ao dai",
+            "seller_id": "1",
+            "seller_name": "John Doe Mot",
+            "buying_count": "0",
+            "avg_rating": ".00",
+            "store_id": "1",
+            "store_name": "Store A1",
+            "status": "Available",
+            "brand": null
+        },
+        {
+            "product_id": "50",
+            "product_name": "Coffee1",
+            "price": "23000.00",
+            "quantity": "100",
+            "category_id": "2",
+            "category_name": "Books",
+            "seller_id": "1",
+            "seller_name": "John Doe Mot",
+            "buying_count": "0",
+            "avg_rating": "3.17",
+            "store_id": "1",
+            "store_name": "Store A1",
+            "status": "Available",
+            "brand": "Nescafe"
+        },
+        {
+            "product_id": "55",
+            "product_name": "An Ao dai Cach tan",
+            "price": "15000.00",
+            "quantity": "50",
+            "category_id": "21",
+            "category_name": "Ao dai",
+            "seller_id": "1",
+            "seller_name": "John Doe Mot",
+            "buying_count": "0",
+            "avg_rating": ".00",
+            "store_id": "1",
+            "store_name": "Store A1",
+            "status": "Available",
+            "brand": null
+        }
+    ]
+}
 
 export default function ProductsManagement() {
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
-    // const [productList, setProductList] = useState([]);
+    const [productList, setProductList] = useState([]);
     const [priceToggle, setPriceToggle] = useState(false);
     const [nameToggle, setNameToggle] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
@@ -35,26 +78,26 @@ export default function ProductsManagement() {
 
 
 
-    // useEffect(() => {
-    //     const loadToken = localStorage.getItem("token");
-    //     if (loadToken) setToken(loadToken);
-    //     axios.get("http://localhost:8000/api/product/getAll?page=0&limit=5",)
-    //         .then((response) => {
-    //             console.log(response);
-    //             const products = response.data.data;
-    //             const pageNum = response.data.totalPage;
-    //             setPage(pageNum);
-    //             // console.log(JSON.stringify(products));
-    //             setProductList(products);
-    //         })
-    //         .catch((error) => {
-    //             if (error.response) {
-    //                 alert(error.response.data.msg);
-    //             } else {
-    //                 console.error('Error:', error.message);
-    //             }
-    //         })
-    // }, [count])
+    useEffect(() => {
+        // axios.get("http://localhost:8000/api/product/getAll?page=0&limit=5",)
+        //     .then((response) => {
+        //         console.log(response);
+        //         const products = response.data.data;
+        //         const pageNum = response.data.totalPage;
+        //         setPage(pageNum);
+        //         // console.log(JSON.stringify(products));
+        //         setProductList(products);
+        //     })
+        //     .catch((error) => {
+        //         if (error.response) {
+        //             alert(error.response.data.msg);
+        //         } else {
+        //             console.error('Error:', error.message);
+        //         }
+        //     })
+
+        setProductList(result.data);
+    }, [count])
 
 
     function disableEditMode() {
@@ -131,10 +174,7 @@ export default function ProductsManagement() {
     return (
         <>
             <Header page="product-manage" role="admin" />
-
-            <div className="m-4 mb-4">
-                <span className=" font-medium">All Products</span>
-            </div>
+            <div className="h-10"></div>
             <main>
                 <div className="w-full flex justify-end items-center mb-4">
                     <div className="add-product inline-block bg-gray-300 h-full relative right-20 p-2 hover:bg-slate-200" onClick={() => { navigate("/product-new") }}>
@@ -158,28 +198,32 @@ export default function ProductsManagement() {
                             <td className="border border-black  w-1/12">Số lượng</td>
                             <td className="border border-black  w-1/12">Rating</td>
                             <td className="border border-black  w-1/12">Cửa hàng</td>
-                            <td className="border border-black  w-1/12">Người bán</td>
+                            <td className="border border-black  w-2/12">Người bán</td>
                             <td className="border border-black  w-1/12"> Tùy chỉnh</td>
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.from({ length: 10 }, (_, i) => (
+                        {productList.map((prod, index) => (
                             <tr className="h-14 border rounded-e-sm">
-                                <td className="border border-black  w-1/12">{i+1}</td>
-                                <td className="border border-black  w-2/12">Tên sản phẩm</td>
-                                <td className="border border-black  w-1/12">Danh mục</td>
-                                <td className="border border-black  w-1.5/12">Giá</td>
-                                <td className="border border-black  w-1/12">Số lượng</td>
-                                <td className="border border-black  w-1/12">Rating</td>
-                                <td className="border border-black  w-1/12">Cửa hàng</td>
-                                <td className="border border-black  w-1/12">Người bán</td>
+                                <td className="border border-black  w-1/12">{index+1}</td>
+                                <td className="border border-black  w-2/12">{prod.product_name}</td>
+                                <td className="border border-black  w-1/12">{prod.category_name}</td>
+                                <td className="border border-black  w-1.5/12">{prod.price}</td>
+                                <td className="border border-black  w-1/12">{prod.buying_count}</td>
+                                <td className="border border-black  w-1/12">{prod.avg_rating}</td>
+                                <td className="border border-black  w-1/12">{prod.store_name}</td>
+                                <td className="border border-black  w-2/12">{prod.seller_name}</td>
                                 <td className="border border-black  w-1/12">
                                 <div className="flex justify-center items-center ">
-                                    <button className="bg-green-600 px-4 rounded-md font-bold text-white uppercase">
+                                    <button className="bg-green-600 px-4 rounded-md font-bold text-white uppercase"
+                                        onClick={() => handleUpdateProduct(index)}
+                                    >
                                         Sửa
                                     </button>
                                     <div className="w-2"></div>
-                                    <div className="bg-red-600 px-4 rounded-md font-bold text-white uppercase " >
+                                    <div className="bg-red-600 px-4 rounded-md font-bold text-white uppercase " 
+                                        onClick={() => handleDeleteProduct(index)}
+                                    >
                                         Xóa
                                     </div>
                                 </div>
